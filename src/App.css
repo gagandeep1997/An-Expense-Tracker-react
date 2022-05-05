@@ -149,3 +149,32 @@ input[type='number'] {
 .list li:hover .delete-btn {
   opacity: 1;
 }
+
+.error-text {
+  color: #b40e0e;
+}
+
+.invalid input[type="text"] {
+  border: 1px solid #b40e0e;
+  background-color: #fddddd;
+}
+
+.invalid input[type="Number"] {
+  border: 1px solid #b40e0e;
+  background-color: #fddddd;
+}
+
+.form-check.invalid input[type="radio"] {
+  border: 1px solid #b40e0e;
+  background-color: #fddddd;
+}
+
+.invalid input[type="text"]:focus {
+  border-color: #ff8800;
+  background-color: #fbe8d2;
+}
+
+.invalid input[type="Number"]:focus {
+  border-color: #ff8800;
+  background-color: #fbe8d2;
+}

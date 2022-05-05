@@ -4,15 +4,19 @@ import { ContextApi } from '../store/contextApi';
 const IncomeExpenses = () => {
   const { Transactions } = useContext(ContextApi);
 
-  const amount = Transactions.map(value => value.amount);
-  const income = amount
-                .filter(amount => amount > 0)
-                .reduce((sum,amount) => sum + amount, 0)
-                .toFixed(2);
-  const expense = amount
-                .filter(amount => amount < 0)
-                .reduce((sum,amount) => sum + amount, 0)*-1
-                .toFixed(2);
+  if(Transactions){
+    if(Transactions){
+      const amount = Transactions.map(value => value.amount);
+      var income = amount
+                    .filter(amount => amount > 0)
+                    .reduce((sum,amount) => sum + amount, 0)
+                    .toFixed(2);
+      var expense = amount
+                    .filter(amount => amount < 0)
+                    .reduce((sum,amount) => sum + amount, 0)*-1
+                    .toFixed(2);
+    }
+  }
 
   return (
     <div className="inc-exp-container">

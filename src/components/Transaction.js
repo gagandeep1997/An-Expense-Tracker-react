@@ -9,7 +9,7 @@ const Transaction = (props) => {
     }
 
     return (
-    <li className={props.amount < 0 ? "minus" : "plus"}>{props.text}<span>{sign}${Math.abs(props.amount)}</span><button onClick={deleteTransactionHandler} className="delete-btn">x</button></li>
+        <li className={props.amount < 0 ? "minus" : "plus"}>{props.text}<span>{sign} &#x20b9;{Math.abs(props.amount)}</span><button onClick={deleteTransactionHandler} className="delete-btn">x</button></li>
     )
 }
 

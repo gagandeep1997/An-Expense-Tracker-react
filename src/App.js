@@ -6,6 +6,7 @@ import TransactionList from './components/TransactionList';
 import AddTransaction from './components/AddTransaction';
 
 function App() {
+
   return (
     <div>
       <Header />

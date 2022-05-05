@@ -1,40 +1,79 @@
-import React , { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 export const ContextApi = React.createContext({
-    Transactions : [],
-    deleteTransactionHandler : () => {},
-    addNewTransactionHandler : () => {},
+  Transactions: [],
+  deleteTransactionHandler: () => {},
+  addNewTransactionHandler: () => {},
 });
 
 export const ContextApiProvider = (props) => {
-    const TransactionsInitalState = [
-        { id: 1, text: 'Flower', amount: -20 },
-        { id: 2, text: 'Salary', amount: 300 },
-        { id: 3, text: 'Book', amount: -10 },
-        { id: 4, text: 'Camera', amount: 150 }
-    ];
+  const [TransactionsList, setTransactionsList] = useState();
 
-    const [TransactionsList , setTransactionsList] = useState(TransactionsInitalState);
-    
-    const deleteTransactionHandler = (id) => {
-        setTransactionsList((prevstate => {
-            return prevstate.filter((value) => {
-                return value.id !== id;
-            })
-        }))
-    };
-
-    const addNewTransactionHandler = (newTransaction) => {
-        setTransactionsList((prevstate => {
-            return [ ...prevstate , newTransaction ];  
-        }))
-    };
-
-    return (
-        <ContextApi.Provider value={{
-            Transactions : TransactionsList,
-            deleteTransactionHandler : deleteTransactionHandler,
-            addNewTransactionHandler : addNewTransactionHandler
-        }}>{props.children}</ContextApi.Provider>
+  const fetchTransactionList = async () => {
+    const response = await fetch(
+      "https://react-expense-tracker-15a90-default-rtdb.firebaseio.com/Transactions.json"
     );
-}
+    const data = await response.json();
+
+    const responsearr = [];
+    for (const property in data) {
+      responsearr.push({
+        id: property,
+        text: data[property].text,
+        amount: data[property].amount,
+      });
+    }
+    setTransactionsList(responsearr);
+  };
+
+  useEffect(() => {
+    fetchTransactionList();
+  }, []);
+
+  const deleteTransactionHandler = async (id) => {
+    // eslint-disable-next-line
+    const response = await fetch(
+      `https://react-expense-tracker-15a90-default-rtdb.firebaseio.com/Transactions/${id}.json`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-type": "application/json",
+        },
+      }
+    );
+    setTransactionsList((prevstate) => {
+      return TransactionsList.filter((data) => {
+        return data.id !== id;
+      });
+    });
+  };
+
+  const addNewTransactionHandler = async (newTransaction) => {
+    // eslint-disable-next-line
+    const response = await fetch(
+      "https://react-expense-tracker-15a90-default-rtdb.firebaseio.com/Transactions.json",
+      {
+        method: "POST",
+        body: JSON.stringify(newTransaction),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    setTransactionsList((prevstate) => {
+      return [...prevstate, newTransaction];
+    });
+  };
+
+  return (
+    <ContextApi.Provider
+      value={{
+        Transactions: TransactionsList,
+        deleteTransactionHandler: deleteTransactionHandler,
+        addNewTransactionHandler: addNewTransactionHandler,
+      }}
+    >
+      {props.children}
+    </ContextApi.Provider>
+  );
+};
